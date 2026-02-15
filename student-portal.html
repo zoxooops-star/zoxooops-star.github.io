@@ -1,0 +1,3746 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#2196F3">
+    <meta name="description" content="FTN mStudent - Studentski portal Fakulteta tehničkih nauka">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="FTN mStudent">
+    <title>FTN mStudent - Student Portal</title>
+    <link rel="manifest" href="manifest.json">
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2196F3;
+            --primary-dark: #1976D2;
+            --bg-gray: #F5F7FA;
+            --text-dark: #1A1A1A;
+            --text-medium: #4A4A4A;
+            --text-light: #7A7A7A;
+            --border: #E0E4E8;
+            --success: #4CAF50;
+            --warning: #FFC107;
+            --danger: #F44336;
+            --shadow: 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-lg: 0 4px 16px rgba(0,0,0,0.12);
+        }
+
+        body {
+            font-family: 'DM Sans', -apple-system, sans-serif;
+            background: var(--bg-gray);
+            color: var(--text-dark);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .app {
+            max-width: 480px;
+            margin: 0 auto;
+            background: #fff;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 40px rgba(0,0,0,0.1);
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 12px rgba(33, 150, 243, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .menu-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            cursor: pointer;
+        }
+
+        .menu-icon span {
+            width: 100%;
+            height: 2px;
+            background: white;
+            border-radius: 2px;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .more-icon {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Student Profile Card */
+        .profile-section {
+            padding: 24px 20px;
+            background: white;
+        }
+
+        .profile-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.15);
+        }
+
+        .avatar-icon {
+            width: 60px;
+            height: 60px;
+        }
+
+        .profile-info h2 {
+            font-size: 14px;
+            color: var(--text-medium);
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .profile-info h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        /* Evidence Button */
+        .evidence-btn {
+            margin: 0 20px 24px;
+            padding: 16px;
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .evidence-btn:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow);
+        }
+
+        .evidence-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        .evidence-btn span {
+            flex: 1;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .arrow-right {
+            width: 20px;
+            height: 20px;
+            color: var(--text-light);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            padding: 0 20px 24px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-card h3 {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-medium);
+            margin-bottom: 12px;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .stat-value.success {
+            color: var(--success);
+        }
+
+        .stat-value.neutral {
+            color: var(--text-light);
+        }
+
+        .stat-value.primary {
+            color: var(--primary);
+        }
+
+        .stat-value.warning {
+            color: var(--warning);
+        }
+
+        .stat-value.danger {
+            color: var(--danger);
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        /* Section Header */
+        .section-header {
+            padding: 20px 20px 16px;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        /* School Year Info */
+        .year-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            padding: 0 20px 24px;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .info-card h3 {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-medium);
+            margin-bottom: 12px;
+        }
+
+        .info-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .info-label {
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        /* Tuition Section */
+        .tuition-section {
+            padding: 0 20px 24px;
+        }
+
+        .tuition-header {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-dark);
+        }
+
+        .tuition-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .tab {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .tab.active {
+            background: var(--success);
+            color: white;
+        }
+
+        .tab:not(.active) {
+            background: var(--bg-gray);
+            color: var(--text-medium);
+        }
+
+        .tuition-chart {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 200px;
+        }
+
+        .pie-chart {
+            position: relative;
+            width: 160px;
+            height: 160px;
+        }
+
+        .pie-background {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(var(--danger) 0% 100%, var(--bg-gray) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pie-center {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--danger);
+        }
+
+        /* ESPB Progress */
+        .espb-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            padding: 0 20px 24px;
+        }
+
+        /* Study Flow */
+        .study-flow {
+            padding: 0 20px 80px;
+        }
+
+        .flow-header {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+        }
+
+        .year-circles {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+        }
+
+        .year-circle {
+            position: relative;
+            width: 140px;
+            height: 140px;
+        }
+
+        .circle-svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .circle-bg {
+            fill: none;
+            stroke: var(--bg-gray);
+            stroke-width: 12;
+        }
+
+        .circle-progress {
+            fill: none;
+            stroke: var(--success);
+            stroke-width: 12;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1s ease;
+        }
+
+        .circle-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .circle-roman {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .circle-label {
+            font-size: 13px;
+            color: var(--text-medium);
+        }
+
+        .circle-stats {
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .stat-passed {
+            color: var(--success);
+        }
+
+        .stat-total {
+            color: var(--primary);
+        }
+
+        .circle-grade {
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        /* Settings Screen */
+        .settings-screen {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 480px;
+            width: 100%;
+            height: 100vh;
+            background: white;
+            z-index: 300;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .settings-screen.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .settings-header {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .back-btn:active {
+            transform: scale(0.9);
+        }
+
+        .settings-title {
+            font-size: 20px;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .settings-content {
+            padding: 24px 20px 80px;
+        }
+
+        .profile-image-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 32px 0;
+            background: white;
+        }
+
+        .profile-photo-wrapper {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .profile-photo {
+            width: 200px;
+            height: 250px;
+            background: linear-gradient(135deg, #E8E8E8 0%, #D0D0D0 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+
+        .photo-icon {
+            width: 140px;
+            height: 140px;
+        }
+
+        .camera-btn {
+            position: absolute;
+            bottom: -12px;
+            right: -12px;
+            width: 56px;
+            height: 56px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .camera-btn:hover {
+            transform: scale(1.1);
+            background: var(--primary-dark);
+        }
+
+        .camera-icon {
+            width: 28px;
+            height: 28px;
+            color: white;
+        }
+
+        .student-id-name {
+            text-align: center;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 32px;
+        }
+
+        .settings-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .settings-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .settings-item:active {
+            background: var(--bg-gray);
+        }
+
+        .settings-icon {
+            width: 24px;
+            height: 24px;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .settings-item-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .settings-item-label {
+            font-size: 15px;
+            color: var(--text-medium);
+            font-weight: 500;
+        }
+
+        .settings-item-value {
+            font-size: 16px;
+            color: var(--text-dark);
+            font-weight: 400;
+        }
+
+        .settings-dropdown {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dropdown-icon {
+            width: 20px;
+            height: 20px;
+            color: var(--text-dark);
+        }
+
+        .toggle-switch {
+            width: 52px;
+            height: 32px;
+            background: #BDBDBD;
+            border-radius: 16px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .toggle-switch.active {
+            background: var(--primary);
+        }
+
+        .toggle-knob {
+            width: 28px;
+            height: 28px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .toggle-switch.active .toggle-knob {
+            transform: translateX(20px);
+        }
+
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 20px 0;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logout-icon {
+            width: 24px;
+            height: 24px;
+            color: var(--primary);
+        }
+
+        .logout-text {
+            font-size: 16px;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        /* Upcoming Days Screen */
+        .upcoming-days-screen {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 480px;
+            width: 100%;
+            height: 100vh;
+            background: white;
+            z-index: 300;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .upcoming-days-screen.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .upcoming-header {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .upcoming-header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex: 1;
+        }
+
+        .upcoming-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .calendar-icon-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .school-year-label {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 20px;
+            font-size: 14px;
+            color: white;
+            font-weight: 500;
+        }
+
+        .upcoming-content {
+            flex: 1;
+            background: var(--bg-gray);
+            padding-bottom: 20px;
+        }
+
+        .month-section {
+            margin-top: 16px;
+        }
+
+        .month-header {
+            background: var(--bg-gray);
+            padding: 12px 20px;
+            font-size: 16px;
+            color: var(--text-medium);
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .holiday-list {
+            background: white;
+        }
+
+        .holiday-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .holiday-icon {
+            width: 48px;
+            height: 48px;
+            background: #F44336;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .calendar-icon {
+            width: 28px;
+            height: 28px;
+            color: white;
+        }
+
+        .holiday-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .holiday-date {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 2px;
+        }
+
+        .holiday-name {
+            font-size: 14px;
+            color: var(--text-medium);
+        }
+
+        .holiday-day {
+            font-size: 14px;
+            color: var(--text-medium);
+            font-weight: 500;
+            flex-shrink: 0;
+        }
+
+        /* Student Info Screen */
+        .student-info-screen {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 480px;
+            width: 100%;
+            height: 100vh;
+            background: var(--bg-gray);
+            z-index: 300;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .student-info-screen.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .info-screen-header {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .info-screen-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .info-profile-section {
+            background: white;
+            padding: 24px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 2px;
+        }
+
+        .info-notice {
+            background: white;
+            padding: 16px 20px;
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .shield-icon {
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+            color: var(--text-dark);
+        }
+
+        .notice-text {
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--text-medium);
+        }
+
+        .form-section {
+            background: white;
+            padding: 20px;
+            margin-bottom: 2px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .edit-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-label {
+            font-size: 14px;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 15px;
+            color: var(--text-dark);
+            background: white;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .form-input:disabled {
+            background: var(--bg-gray);
+            color: var(--text-medium);
+        }
+
+        .section-subtitle {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 24px 0 16px;
+        }
+
+        /* Passed Subjects Screen */
+        .passed-subjects-screen {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 480px;
+            width: 100%;
+            height: 100vh;
+            background: var(--bg-gray);
+            z-index: 300;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .passed-subjects-screen.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .subjects-header {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .subjects-header-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .subjects-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 16px;
+        }
+
+        .header-icon-btn {
+            width: 28px;
+            height: 28px;
+            cursor: pointer;
+        }
+
+        .subjects-summary {
+            background: var(--bg-gray);
+            padding: 16px 20px;
+            font-size: 14px;
+            color: var(--text-medium);
+        }
+
+        .summary-line {
+            margin-bottom: 4px;
+        }
+
+        .subjects-content {
+            padding-bottom: 80px;
+        }
+
+        .year-section {
+            margin-top: 16px;
+        }
+
+        .year-header {
+            background: var(--bg-gray);
+            padding: 12px 20px;
+            font-size: 16px;
+            color: var(--text-medium);
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .subjects-list {
+            background: white;
+        }
+
+        .subject-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .subject-item:active {
+            background: var(--bg-gray);
+        }
+
+        .grade-badge {
+            width: 52px;
+            height: 52px;
+            background: var(--success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .subject-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .subject-code-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+
+        .subject-professor {
+            font-size: 13px;
+            color: var(--text-medium);
+        }
+
+        .subject-espb {
+            font-size: 15px;
+            color: var(--text-dark);
+            font-weight: 500;
+            flex-shrink: 0;
+            margin-right: 8px;
+        }
+
+        .subject-arrow {
+            width: 20px;
+            height: 20px;
+            color: var(--text-light);
+            flex-shrink: 0;
+        }
+
+        /* Exam Results Screen */
+        .exam-results-screen {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 480px;
+            width: 100%;
+            height: 100vh;
+            background: white;
+            z-index: 10;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 70px;
+        }
+
+        .exam-results-screen.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .results-header {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .results-header-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .results-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .results-subheader {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+        }
+
+        .empty-state {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            background: white;
+        }
+
+        .empty-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        .database-icon-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+            margin-bottom: 80px;
+        }
+
+        .database-icon {
+            width: 200px;
+            height: 200px;
+            position: relative;
+        }
+
+        .database-stack {
+            fill: #B0B0B0;
+        }
+
+        .warning-triangle {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 60px;
+        }
+
+        .results-bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+        /* Failed Subjects Screen */
+        .failed-subjects-screen {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 480px;
+            width: 100%;
+            height: 100vh;
+            background: var(--bg-gray);
+            z-index: 300;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .failed-subjects-screen.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .failed-summary {
+            background: var(--bg-gray);
+            padding: 16px 20px;
+            font-size: 14px;
+            color: var(--text-medium);
+        }
+
+        .failed-grade-badge {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .failed-grade-badge.grade-9 {
+            background: #9C27B0;
+        }
+
+        .failed-grade-badge.grade-7 {
+            background: #F44336;
+        }
+
+        .failed-grade-badge.grade-6 {
+            background: #F44336;
+        }
+
+        .failed-grade-badge.grade-5 {
+            background: #FF9800;
+        }
+
+        .failed-grade-badge.grade-4 {
+            background: #FF9800;
+        }
+
+        .failed-grade-badge.grade-3 {
+            background: #CDDC39;
+        }
+
+        .subject-status {
+            font-size: 13px;
+            color: var(--text-medium);
+        }
+
+        .subject-semester {
+            font-size: 15px;
+            color: var(--text-dark);
+            font-weight: 500;
+            flex-shrink: 0;
+            margin-right: 8px;
+        }
+
+        /* Attendance Statistics Screen */
+        .attendance-screen {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 480px;
+            width: 100%;
+            height: 100vh;
+            background: white;
+            z-index: 300;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .attendance-screen.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .attendance-header {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .attendance-header-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .attendance-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .attendance-subheader {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+        }
+
+        /* News Screen */
+        .news-screen {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 480px;
+            width: 100%;
+            height: 100vh;
+            background: white;
+            z-index: 300;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .news-screen.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .news-header {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .news-header-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .news-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .news-filter-tabs {
+            background: white;
+            padding: 16px 20px;
+            display: flex;
+            gap: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .filter-tab {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding-bottom: 4px;
+        }
+
+        .filter-radio {
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--text-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .filter-tab.active .filter-radio {
+            border-color: var(--primary);
+        }
+
+        .filter-radio-inner {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary);
+            transform: scale(0);
+            transition: transform 0.2s ease;
+        }
+
+        .filter-tab.active .filter-radio-inner {
+            transform: scale(1);
+        }
+
+        .filter-label {
+            font-size: 16px;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        /* Study Flow Screen */
+        .study-flow-screen {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 480px;
+            width: 100%;
+            height: 100vh;
+            background: var(--bg-gray);
+            z-index: 300;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .study-flow-screen.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .study-flow-header {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .study-flow-header-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .study-flow-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .study-flow-content {
+            padding: 0 0 80px;
+        }
+
+        .program-item {
+            background: white;
+            margin: 16px 0;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .program-item:active {
+            background: var(--bg-gray);
+        }
+
+        .program-year-badge {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .program-year-badge.red {
+            background: #F44336;
+        }
+
+        .program-year-badge.green {
+            background: #4CAF50;
+        }
+
+        .program-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .program-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+
+        .program-type {
+            font-size: 13px;
+            color: var(--text-medium);
+        }
+
+        .program-semesters {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+            margin-right: 8px;
+        }
+
+        .semester-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        .year-divider {
+            background: var(--bg-gray);
+            padding: 12px 20px;
+            font-size: 16px;
+            color: var(--text-medium);
+            font-weight: 500;
+            text-align: center;
+        }
+
+        /* Exam Periods Screen */
+        .exam-periods-screen {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 480px;
+            width: 100%;
+            height: 100vh;
+            background: white;
+            z-index: 300;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .exam-periods-screen.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .exam-periods-header {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .exam-periods-title {
+            font-size: 20px;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .exam-periods-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .exam-periods-instruction {
+            font-size: 15px;
+            color: var(--text-dark);
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .exam-period-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .exam-period-card:hover {
+            box-shadow: var(--shadow);
+        }
+
+        .info-icon-circle {
+            width: 48px;
+            height: 48px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .info-icon {
+            width: 28px;
+            height: 28px;
+            color: white;
+        }
+
+        .exam-period-info {
+            flex: 1;
+        }
+
+        .exam-period-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .exam-period-description {
+            font-size: 14px;
+            color: var(--text-medium);
+            line-height: 1.4;
+        }
+
+        /* Exam Period Details Screen */
+        .exam-details-screen {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 480px;
+            width: 100%;
+            height: 100vh;
+            background: white;
+            z-index: 400;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .exam-details-screen.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .exam-details-header {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .exam-details-title {
+            font-size: 18px;
+            font-weight: 600;
+            flex: 1;
+            line-height: 1.3;
+        }
+
+        .exam-summary {
+            background: white;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            font-size: 15px;
+        }
+
+        .summary-label {
+            color: var(--text-dark);
+        }
+
+        .summary-value {
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .exam-list {
+            flex: 1;
+            overflow-y: auto;
+            background: var(--bg-gray);
+        }
+
+        .exam-item {
+            background: white;
+            margin: 1px 0;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .exam-item:active {
+            background: var(--bg-gray);
+        }
+
+        .exam-toggle {
+            width: 52px;
+            height: 28px;
+            background: #BDBDBD;
+            border-radius: 14px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .exam-toggle.active {
+            background: var(--primary);
+        }
+
+        .exam-toggle-knob {
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .exam-toggle.active .exam-toggle-knob {
+            transform: translateX(24px);
+        }
+
+        .exam-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .exam-code-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 2px;
+        }
+
+        .exam-professor {
+            font-size: 13px;
+            color: var(--text-medium);
+            margin-bottom: 2px;
+        }
+
+        .exam-deadline {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .exam-meta {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+
+        .exam-date {
+            font-size: 14px;
+            color: var(--text-medium);
+        }
+
+        .exam-price {
+            font-size: 14px;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .register-button {
+            background: linear-gradient(135deg, #E0E0E0 0%, #BDBDBD 100%);
+            color: var(--text-dark);
+            padding: 16px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .register-button:hover {
+            background: linear-gradient(135deg, #D0D0D0 0%, #ADADAD 100%);
+        }
+
+        /* Annual Schedule Screen */
+        .annual-schedule-screen {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 480px;
+            width: 100%;
+            height: 100vh;
+            background: var(--bg-gray);
+            z-index: 300;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .annual-schedule-screen.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .schedule-period-header {
+            background: var(--bg-gray);
+            padding: 12px 20px;
+            font-size: 16px;
+            color: var(--text-medium);
+            font-weight: 500;
+            text-align: center;
+            margin-top: 2px;
+        }
+
+        .schedule-exam-item {
+            background: white;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .schedule-exam-item:active {
+            background: var(--bg-gray);
+        }
+
+        .schedule-badge {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .schedule-badge.rr {
+            background: var(--primary);
+        }
+
+        .schedule-badge.vr {
+            background: var(--success);
+        }
+
+        /* Exam Schedule Screen */
+        .exam-schedule-screen {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 480px;
+            width: 100%;
+            height: 100vh;
+            background: white;
+            z-index: 300;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .exam-schedule-screen.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .exam-schedule-header {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .exam-schedule-header-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .exam-schedule-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .exam-schedule-subheader {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+        }
+
+        .exam-schedule-content {
+            flex: 1;
+            overflow-y: auto;
+            background: var(--bg-gray);
+        }
+
+        .schedule-empty-state {
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .schedule-period-section {
+            margin-top: 2px;
+        }
+
+        .schedule-exam {
+            background: white;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .schedule-exam:active {
+            background: var(--bg-gray);
+        }
+
+        .question-badge {
+            width: 52px;
+            height: 52px;
+            background: #FFC107;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        /* Error Message */
+        .error-message {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 460px;
+            width: calc(100% - 40px);
+            background: white;
+            border: 2px solid #F44336;
+            border-radius: 8px;
+            padding: 16px 20px;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .error-message.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .error-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #F44336;
+            margin-bottom: 4px;
+        }
+
+        .error-text {
+            font-size: 15px;
+            color: var(--text-dark);
+            line-height: 1.4;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 480px;
+            width: 100%;
+            background: white;
+            border-top: 1px solid var(--border);
+            display: flex;
+            padding: 8px 0;
+            box-shadow: 0 -2px 12px rgba(0,0,0,0.06);
+            z-index: 100;
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-item:not(.active) {
+            color: var(--text-light);
+        }
+
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        /* Side Menu */
+        .side-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 300px;
+            height: 100vh;
+            background: white;
+            box-shadow: 2px 0 20px rgba(0,0,0,0.15);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            z-index: 200;
+            overflow-y: auto;
+        }
+
+        .side-menu.open {
+            transform: translateX(0);
+        }
+
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 199;
+        }
+
+        .menu-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .menu-header {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            padding: 40px 20px 20px;
+            color: white;
+        }
+
+        .menu-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .menu-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-items {
+            padding: 8px 0;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .menu-item:hover {
+            background: var(--bg-gray);
+        }
+
+        .menu-item-icon {
+            width: 24px;
+            height: 24px;
+            color: var(--primary);
+        }
+
+        .menu-item-text {
+            font-size: 15px;
+            color: var(--text-dark);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stat-card, .info-card {
+            animation: fadeInUp 0.5s ease backwards;
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+        .stat-card:nth-child(4) { animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        function App() {
+            const [activeTab, setActiveTab] = useState('home');
+            const [menuOpen, setMenuOpen] = useState(false);
+            const [tuitionTab, setTuitionTab] = useState('paid');
+            const [settingsOpen, setSettingsOpen] = useState(false);
+            const [darkMode, setDarkMode] = useState(false);
+            const [upcomingDaysOpen, setUpcomingDaysOpen] = useState(false);
+            const [studentInfoOpen, setStudentInfoOpen] = useState(false);
+            const [passedSubjectsOpen, setPassedSubjectsOpen] = useState(false);
+            const [failedSubjectsOpen, setFailedSubjectsOpen] = useState(false);
+            const [attendanceOpen, setAttendanceOpen] = useState(false);
+            const [newsOpen, setNewsOpen] = useState(false);
+            const [newsFilter, setNewsFilter] = useState('unread');
+            const [studyFlowOpen, setStudyFlowOpen] = useState(false);
+            const [examPeriodsOpen, setExamPeriodsOpen] = useState(false);
+            const [examPeriodDetailsOpen, setExamPeriodDetailsOpen] = useState(false);
+            const [selectedExamPeriod, setSelectedExamPeriod] = useState(null);
+            const [annualScheduleOpen, setAnnualScheduleOpen] = useState(false);
+            const [examScheduleOpen, setExamScheduleOpen] = useState(false);
+            const [examResultsOpen, setExamResultsOpen] = useState(false);
+            const [showError, setShowError] = useState(false);
+            const [registeredExams, setRegisteredExams] = useState({
+                '20.E128F': true,
+                '20.E122': true,
+                '20.E121': true
+                  
+            });
+            const [savedExamState, setSavedExamState] = useState({
+                '20.E128F': true,
+                '20.E122': true,
+                '20.E121': true
+            });
+
+            const toggleExamRegistration = (examCode) => {
+                setRegisteredExams(prev => ({
+                    ...prev,
+                    [examCode]: !prev[examCode]
+                }));
+            };
+
+            const calculateExamSummary = () => {
+                if (!selectedExamPeriod) return { toRegister: 0, toWithdraw: 0, totalCost: 0 };
+                
+                let toRegister = 0;
+                let toWithdraw = 0;
+                let totalCost = 0;
+
+                selectedExamPeriod.exams.forEach(exam => {
+                    const isCurrentlyRegistered = registeredExams[exam.code];
+                    const wasPreviouslySaved = savedExamState[exam.code];
+                    
+                    if (isCurrentlyRegistered && !wasPreviouslySaved) {
+                        // New registration
+                        toRegister++;
+                        totalCost -= parseFloat(exam.price.replace('.', '').replace(',', '.'));
+                    } else if (!isCurrentlyRegistered && wasPreviouslySaved) {
+                        // Withdrawal
+                        toWithdraw += parseFloat(exam.price.replace('.', '').replace(',', '.'));
+                    }
+                });
+
+                return { toRegister, toWithdraw, totalCost };
+            };
+
+            const summary = calculateExamSummary();
+            const balance = 33600;
+            const finalBalance = balance + summary.totalCost + summary.toWithdraw;
+
+            const saveExamRegistration = () => {
+                // Save the current state
+                setSavedExamState({...registeredExams});
+                setRegisteredExams({...registeredExams});
+                
+                // Show confirmation message
+                alert('Prijava/odjava ispita je uspešno sačuvana!\n\nRegistrovani ispiti: ' + 
+                      Object.keys(registeredExams).filter(code => registeredExams[code]).length);
+                
+                // Close the details screen
+                setExamPeriodDetailsOpen(false);
+            };
+
+            const showErrorMessage = () => {
+                setShowError(true);
+                setTimeout(() => {
+                    setShowError(false);
+                }, 2000);
+            };
+
+            const studentData = {
+                id: 'EE 60/2023',
+                name: 'Kristian Kandić',
+                balance: '33.600,00',
+                newsCount: 0,
+                registrations: 3,
+                results: 0,
+                schoolYear: '2025 / 2026',
+                studyYear: 2,
+                studyType: '1. put samofinansiranje',
+                averageGrade: '9,00',
+                totalExams: 38,
+                espbEarned: 0,
+                espbTotal: 54,
+                passedSubjects: 11,
+                failedSubjects: 6,
+                tuitionOwed: 45000
+            };
+
+            const menuItems = [
+                { icon: '📰', label: 'Vesti', action: 'news' },
+                { icon: '👤', label: 'Podaci o studentu', action: 'studentInfo' },
+                { icon: '💎', label: 'Tok studija', action: 'studyFlow' },
+                { icon: '✏️', label: 'Statistika prisustva', action: 'attendance' },
+                { icon: '📊', label: 'Položeni predmeti', action: 'passedSubjects' },
+                { icon: '📋', label: 'Nepoloženi predmeti', action: 'failedSubjects' },
+                { icon: '📅', label: 'Godišnji raspored ispita', action: 'annualSchedule' },
+                { icon: '📆', label: 'Neradni dani', action: 'upcomingDays' }
+            ];
+
+            const passedSubjects = {
+                year1: [
+                    { code: '20.EJ02L', name: 'Engleski jezik - niži srednji', professor: 'Zivlak Jelena', espb: 2, grade: 10 },
+                    { code: '20.EJ01Z', name: 'Engleski jezik - osnovni', professor: 'Zivlak Jelena', espb: 2, grade: 10 },
+                    { code: '20.E111', name: 'Programski jezici i strukture podataka', professor: 'Popov Srđan', espb: 6, grade: 10 },
+                    { code: '20.E109', name: 'Softverski praktikum', professor: 'Radić Jelena', espb: 2, grade: 10 },
+                    { code: '20.E101B', name: 'Algebra', professor: 'Prokić Ivan', espb: 9, grade: 9},
+                    { code: '20.E104', name: 'Mehanika', professor: 'Mađarević Damir', espb: 5, grade: 9 },
+                    { code: '20.E106', name: 'Sociologija tehnike', espb: 3, grade: 8 },
+                    { code: '20.E105', name: 'Osnovi elektrotehnike 1', professor: 'Đurić Nikola', espb: 9, grade: 8 },
+                    { code: '20.E110', name: 'Osnovi elektrotehnike 2', professor: 'Đurić Nikola', espb: 9, grade: 7 }
+
+
+                ],
+                year2: [
+                    { code: '20.EJ03Z', name: 'Engleski jezik - srednji', professor: 'Gak Dragana', espb: 2, grade: 10 },
+                    { code: '20.E138A', name: 'Digitalna elektronika', professor: 'Damnjanović Mirjana', espb: 5,grade: 8 }
+                ]
+            };
+
+            const failedSubjects = {
+                year1: [
+                    
+                    { code: '20.E102A', name: 'Matematička analiza 1', status: 'Polaže preko kolokvijuma', semester: 'Letnji', grade: 9 },
+                    { code: '20.E103', name: 'Fizika', status: 'Ponovo sluša', semester: 'Letnji', grade: 4 },
+                    
+                ],
+                year2: [
+                    { code: '20.E121', name: 'Matematička analiza 2', status: 'Polaže preko kolokvijuma', semester: 'Zimski', grade: 7 },
+                    { code: '20.E122', name: 'Uvod u elektroniku', status: 'Samo polaže', semester: 'Zimski', grade: 6 },
+                    { code: '20.E128F', name: 'Teorija električnih kola', status: 'Samo polaže', semester: 'Zimski', grade: 6 },         
+                    { code: '20.EE418E', name: 'Električne mašine i pogoni', status: 'Ponovo sluša', semester: 'Zimski', grade: 4 }
+                ]
+            };
+
+            const studyFlowPrograms = [
+                { 
+                    year: '2025/26', 
+                    program: 'Energetika, elektronika i telekomunikacije/Mikroračunarska elektronika',
+                    type: 'Samofinansiranje',
+                    yearNum: 'II',
+                    semesters: { winter: true, summer: true }
+                },
+                { 
+                    year: '2024/25', 
+                    program: 'Energetika, elektronika i telekomunikacije',
+                    type: 'Samofinansiranje',
+                    yearNum: 'I',
+                    semesters: { winter: true, summer: false }
+                },
+                { 
+                    year: '2023/24', 
+                    program: 'Energetika, elektronika i telekomunikacije',
+                    type: 'Budžet',
+                    yearNum: 'I',
+                    semesters: { winter: true, summer: true }
+                }
+            ];
+
+            const examPeriods = [
+                {
+                    id: 1,
+                    name: 'Januarsko-februarski rok I 2025/2026',
+                    info: 'Prijava je moguća najkasnije do 2 radna dana pre polaganja ispita. Nema ograničenja na broj prijavljenih ispita',
+                    exams: [
+                        { 
+                            code: '20.E128F', 
+                            name: 'Teorija električnih kola', 
+                            professor: 'Dautović Staniša', 
+                            date: '20.02.2026.', 
+                            price: '200,00 RSD',
+                            deadline: 'Prijava/odjava do 17.02.2026. u 23:59',
+                            registered: true
+                        },
+                        { 
+                            code: '20.EE418E', 
+                            name: 'Električne mašine i pogoni', 
+                            professor: 'Reljić Dejan', 
+                            date: '22.02.2026.', 
+                            price: '200,00 RSD',
+                            deadline: 'Prijava/odjava do 18.02.2026. u 23:59',
+                            registered: false
+                        },
+                        { 
+                            code: '20.E102A', 
+                            name: 'Matematička analiza 1', 
+                            professor: 'Ralević Nebojša', 
+                            date: '23.02.2026.', 
+                            price: '300,00 RSD',
+                            deadline: 'Prijava/odjava do 18.02.2026. u 23:59',
+                            registered: false
+                        },
+                        { 
+                            code: '20.E122', 
+                            name: 'Uvod u elektroniku', 
+                            professor: 'Stojanović Goran', 
+                            date: '24.02.2026.', 
+                            price: '200,00 RSD',
+                            deadline: 'Prijava/odjava do 19.02.2026. u 23:59',
+                            registered: true
+                        },
+                        { 
+                            code: '20.E103', 
+                            name: 'Fizika', 
+                            professor: 'Ilić Dušan', 
+                            date: '27.02.2026.', 
+                            price: '200,00 RSD',
+                            deadline: 'Prijava/odjava do 24.02.2026. u 23:59',
+                            registered: false
+                        },
+                        
+                        { 
+                            code: '20.E121', 
+                            name: 'Matematička analiza 2', 
+                            professor: 'Mihailović Biljana', 
+                            date: '01.03.2026.', 
+                            price: '300,00 RSD',
+                            deadline: 'Prijava/odjava do 25.02.2026. u 23:59',
+                            registered: true
+                        }
+                    ]
+                }
+            ];
+
+            const annualSchedulePeriods = [
+                { 
+                    name: 'Januarsko-februarski rok I',
+                    exams: [
+                        { name: 'Teorija električnih kola', professor: 'Dautović Staniša', date: '20.02.2026.' },
+                        { name: 'Električne mašine i pogoni', professor: 'Reljić Dejan', date: '22.02.2026.' },
+                        { name: 'Matematička analiza 1', professor: 'Ralević Nebojša', date: '23.02.2026.' },
+                        { name: 'Uvod u elektroniku', professor: 'Stojanović Goran', date: '24.02.2026.' },
+                        { name: 'Fizika', professor: 'Ilić Dušan', date: '27.02.2026.' },
+                        { name: 'Matematička analiza 2', professor: 'Mihailović Biljana', date: '01.03.2026.' },
+                    ]
+                },
+                {
+                    name: 'Januarsko-februarski rok II',
+                    exams: [
+                        { name: 'Teorija električnih kola', professor: 'Dautović Staniša', date: '04.03.2026.' },
+                        { name: 'Matematička analiza 1', professor: 'Ralević Nebojša', date: '05.03.2026.' },
+                        { name: 'Uvod u elektroniku', professor: 'Stojanović Goran', date: '05.03.2026.' },
+                        { name: 'Fizika', professor: 'Ilić Dušan', date: '06.03.2026.' },
+                        { name: 'Električne mašine i pogoni', professor: 'Reljić Dejan', date: '07.03.2026.' },
+                        { name: 'Matematička analiza 2', professor: 'Mihailović Biljana', date: '08.03.2026.' },
+                    ]
+                },
+                {
+                    name: 'Aprilski rok',
+                    exams: [
+                        { name: 'Matematička analiza 2', professor: 'Mihailović Biljana', date: '20.04.2026.' },
+                        { name: 'Teorija električnih kola', professor: 'Dautović Staniša', date: '21.04.2026.' },
+                        { name: 'Uvod u elektroniku', professor: 'Stojanović Goran', date: '22.04.2026.' },
+                        { name: 'Matematička analiza 1', professor: 'Ralević Nebojša', date: '22.04.2026.' },
+                        { name: 'Fizika', professor: 'Ilić Dušan', date: '23.04.2026.' },
+                        { name: 'Električne mašine i pogoni', professor: 'Reljić Dejan', date: '24.04.2026.' },
+                    ]
+                },
+                {
+                    name: 'Junsko-julski rok I',
+                    exams: [
+                        { name: 'Matematička analiza 2', professor: 'Mihailović Biljana', date: '30.06.2026.' },
+                        { name: 'Teorija električnih kola', professor: 'Dautović Staniša', date: '01.07.2026.' },
+                        { name: 'Uvod u elektroniku', professor: 'Stojanović Goran', date: '05.07.2026.' },
+                        { name: 'Matematička analiza 1', professor: 'Ralević Nebojša', date: '06.07.2026.' },
+                        { name: 'Fizika', professor: 'Ilić Dušan', date: '08.07.2026.' },
+                        { name: 'Električne mašine i pogoni', professor: 'Reljić Dejan', date: '09.07.2026.' },
+                    ]
+                },
+                {
+                    name: 'Junsko-julski rok II',
+                    exams: [
+                        { name: 'Matematička analiza 2', professor: 'Mihailović Biljana', date: '13.07.2026.' },
+                        { name: 'Teorija električnih kola', professor: 'Dautović Staniša', date: '14.07.2026.' },
+                        { name: 'Uvod u elektroniku', professor: 'Stojanović Goran', date: '15.07.2026.' },
+                        { name: 'Matematička analiza 1', professor: 'Ralević Nebojša', date: '15.07.2026.' },
+                        { name: 'Fizika', professor: 'Ilić Dušan', date: '16.07.2026.' },
+                        { name: 'Električne mašine i pogoni', professor: 'Reljić Dejan', date: '17.07.2026.' },
+                    ]
+                },
+                {
+                    name: 'Avgustovsko-septembarski rok I',
+                    exams: [
+                        { name: 'Matematička analiza 2', professor: 'Mihailović Biljana', date: '24.08.2026.' },
+                        { name: 'Teorija električnih kola', professor: 'Dautović Staniša', date: '25.08.2026.' },
+                        { name: 'Matematička analiza 1', professor: 'Ralević Nebojša', date: '26.08.2026.' },
+                        { name: 'Uvod u elektroniku', professor: 'Stojanović Goran', date: '26.08.2026.' },
+                        { name: 'Fizika', professor: 'Ilić Dušan', date: '27.08.2026.' },
+                        { name: 'Električne mašine i pogoni', professor: 'Reljić Dejan', date: '28.08.2026.' },
+                    ]
+                },
+                {
+                    name: 'Avgustovsko-septembarski rok II',
+                    exams: [
+                        { name: 'Matematička analiza 2', professor: 'Mihailović Biljana', date: '01.09.2026.' },
+                        { name: 'Teorija električnih kola', professor: 'Dautović Staniša', date: '02.09.2026.' },
+                        { name: 'Uvod u elektroniku', professor: 'Stojanović Goran', date: '04.09.2026.' },
+                        { name: 'Matematička analiza 1', professor: 'Ralević Nebojša', date: '05.09.2026.' },
+                        { name: 'Fizika', professor: 'Ilić Dušan', date: '08.09.2026.' },
+                        { name: 'Električne mašine i pogoni', professor: 'Reljić Dejan', date: '09.09.2026.' },
+                    ]
+                },
+                {
+                    name: 'Dodatni septembarski rok 1',
+                    badge: 'VR',
+                    color: 'green',
+                    exams: [
+                        { name: 'Matematička analiza 2', professor: 'Mihailović Biljana', date: '14.09.2026.' },
+                        { name: 'Teorija električnih kola', professor: 'Dautović Staniša', date: '15.09.2026.' },
+                        { name: 'Uvod u elektroniku', professor: 'Stojanović Goran', date: '16.09.2026.' },
+                        { name: 'Matematička analiza 1', professor: 'Ralević Nebojša', date: '16.09.2026.' },
+                        { name: 'Fizika', professor: 'Ilić Dušan', date: '17.09.2026.' },
+                        { name: 'Električne mašine i pogoni', professor: 'Reljić Dejan', date: '18.09.2026.' },
+                    ]
+                },
+                {
+                    name: 'Dodatni septembarski rok 2',
+                    badge: 'VR',
+                    color: 'green',
+                    exams: [
+                        { name: 'Matematička analiza 2', professor: 'Mihailović Biljana', date: '21.09.2026.' },
+                        { name: 'Teorija električnih kola', professor: 'Dautović Staniša', date: '22.09.2026.' },
+                        { name: 'Uvod u elektroniku', professor: 'Stojanović Goran', date: '23.09.2026.' },
+                        { name: 'Matematička analiza 1', professor: 'Ralević Nebojša', date: '23.09.2026.' },
+                        { name: 'Fizika', professor: 'Ilić Dušan', date: '24.09.2026.' },
+                        { name: 'Električne mašine i pogoni', professor: 'Reljić Dejan', date: '25.09.2026.' },
+                    ]
+                }
+            ];
+
+            const examSchedule = {
+                'Januarsko-februarski rok I': [
+                    { code: '20.E128F', name: 'Teorija električnih kola', date: '20.02.2026.' },
+                    { code: '20.E122', name: 'Uvod u elektroniku', date: '24.02.2026.' },
+                    { code: '20.E121', name: 'Matematička analiza 2', date: '01.03.2026.' }
+                   
+                ]
+            };
+
+            const upcomingDays = {
+                'Novembar': [
+                    { date: '11.11.2025.', name: 'Dan primirja u Prvom svetskom ratu', day: 'Utorak' }
+                ],
+                'Januar': [
+                    { date: '01.01.2026.', name: 'Nova godina', day: 'Četvrtak' },
+                    { date: '02.01.2026.', name: 'Nova godina', day: 'Petak' },
+                    { date: '07.01.2026.', name: 'Božić', day: 'Sreda' }
+                ],
+                'Februar': [
+                    { date: '15.02.2026.', name: 'Dan državnosti', day: 'Nedelja' },
+                    { date: '16.02.2026.', name: 'Dan državnosti', day: 'Ponedeljak' },
+                    { date: '17.02.2026.', name: 'Dan državnosti', day: 'Utorak' }
+                ],
+                'April': [
+                    { date: '10.04.2026.', name: 'Veliki petak', day: 'Petak' },
+                    { date: '11.04.2026.', name: 'Velika subota', day: 'Subota' },
+                    { date: '12.04.2026.', name: 'Vaskrs', day: 'Nedelja' },
+                    { date: '13.04.2026.', name: 'Vaskršnji ponedeljak', day: 'Ponedeljak' }
+                ],
+                'Maj': [
+                    { date: '01.05.2026.', name: 'Međunarodni praznik rada', day: 'Petak' },
+                    { date: '02.05.2026.', name: 'Međunarodni praznik rada', day: 'Subota' }
+                ]
+            };
+
+            const calculateCircleProgress = (passed, total) => {
+                const percentage = (passed / total) * 100;
+                const circumference = 2 * Math.PI * 58;
+                return {
+                    circumference,
+                    offset: circumference - (percentage / 100) * circumference
+                };
+            };
+
+            const year1Progress = calculateCircleProgress(12, 14);
+            const year2Progress = calculateCircleProgress(2, 14);
+
+            return (
+                <div className="app">
+                    {/* Menu Overlay */}
+                    <div 
+                        className={`menu-overlay ${menuOpen ? 'open' : ''}`}
+                        onClick={() => setMenuOpen(false)}
+                    />
+
+                    {/* Side Menu */}
+                    <div className={`side-menu ${menuOpen ? 'open' : ''}`}>
+                        <div className="menu-header">
+                            <div className="menu-profile">
+                                <div className="menu-avatar">
+                                    <svg className="avatar-icon" viewBox="0 0 24 24" fill="white">
+                                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <div style={{fontSize: '12px', opacity: 0.9}}>{studentData.id}</div>
+                                    <div style={{fontSize: '16px', fontWeight: '600'}}>{studentData.name}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="menu-items">
+                            {menuItems.map((item, idx) => (
+                                <div 
+                                    key={idx} 
+                                    className="menu-item"
+                                    onClick={() => {
+                                        if (item.action === 'upcomingDays') {
+                                            setUpcomingDaysOpen(true);
+                                            setMenuOpen(false);
+                                        } else if (item.action === 'studentInfo') {
+                                            setStudentInfoOpen(true);
+                                            setMenuOpen(false);
+                                        } else if (item.action === 'passedSubjects') {
+                                            setPassedSubjectsOpen(true);
+                                            setMenuOpen(false);
+                                        } else if (item.action === 'failedSubjects') {
+                                            setFailedSubjectsOpen(true);
+                                            setMenuOpen(false);
+                                        } else if (item.action === 'attendance') {
+                                            setAttendanceOpen(true);
+                                            setMenuOpen(false);
+                                        } else if (item.action === 'news') {
+                                            setNewsOpen(true);
+                                            setMenuOpen(false);
+                                        } else if (item.action === 'studyFlow') {
+                                            setStudyFlowOpen(true);
+                                            setMenuOpen(false);
+                                        } else if (item.action === 'annualSchedule') {
+                                            setAnnualScheduleOpen(true);
+                                            setMenuOpen(false);
+                                        }
+                                    }}
+                                >
+                                    <span style={{fontSize: '20px'}}>{item.icon}</span>
+                                    <span className="menu-item-text">{item.label}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Header */}
+                    <div className="header" style={{display: activeTab === 'info' ? 'none' : 'flex'}}>
+                        <div className="header-left">
+                            <div className="menu-icon" onClick={() => setMenuOpen(true)}>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <div className="header-title">FAKULTET TEHNIČKIH NAUKA</div>
+                        </div>
+                        <div className="more-icon" onClick={() => setSettingsOpen(true)}>⋮</div>
+                    </div>
+
+                    {/* Student Profile */}
+                    {activeTab === 'home' && (
+                        <>
+                    <div className="profile-section">
+                        <div className="profile-card">
+                            <div className="profile-avatar">
+                                <svg className="avatar-icon" viewBox="0 0 24 24" fill="#2196F3">
+                                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                </svg>
+                            </div>
+                            <div className="profile-info">
+                                <h2>{studentData.id}</h2>
+                                <h1>{studentData.name}</h1>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Evidence Button */}
+                    <div className="evidence-btn" onClick={showErrorMessage}>
+                        <svg className="evidence-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        <span>Evidencija prisustva</span>
+                        <svg className="arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </div>
+
+                    {/* Stats Grid */}
+                    <div className="stats-grid">
+                        <div className="stat-card">
+                            <h3>Raspoloživo stanje</h3>
+                            <div className="stat-value success">
+                                RSD {studentData.balance}
+                            </div>
+                            <div className="stat-label">na finansijskoj kartici</div>
+                        </div>
+                        <div className="stat-card">
+                            <h3>Broj vesti</h3>
+                            <div className="stat-value neutral">{studentData.newsCount}</div>
+                            <div className="stat-label">koje niste pročitali</div>
+                        </div>
+                        <div className="stat-card">
+                            <h3>Broj prijava</h3>
+                            <div className="stat-value primary">{studentData.registrations}</div>
+                            <div className="stat-label">u aktivnim ispitnim rokovima</div>
+                        </div>
+                        <div className="stat-card">
+                            <h3>Broj objavljenih rezultata</h3>
+                            <div className="stat-value neutral">{studentData.results}</div>
+                            <div className="stat-label">u aktivnim ispitnim rokovima</div>
+                        </div>
+                    </div>
+
+                    {/* Section: Uslovi za upis naredne školske */}
+                    <div className="section-header">Podaci o studiranju</div>
+
+                    {/* Year Info Grid */}
+                    <div className="year-info-grid">
+                        <div className="info-card">
+                            <h3>Školska godina</h3>
+                            <div className="info-value">{studentData.schoolYear}</div>
+                            <div className="info-label">poslednjeg upisa</div>
+                        </div>
+                        <div className="info-card">
+                            <h3>Godina studija</h3>
+                            <div className="info-value">{studentData.studyYear}</div>
+                            <div className="info-label">{studentData.studyType}</div>
+                        </div>
+                    </div>
+
+                    {/* More Stats */}
+                    <div className="year-info-grid">
+                        <div className="info-card">
+                            <h3>Prosečna ocena</h3>
+                            <div className="info-value" style={{color: 'var(--primary)'}}>{studentData.averageGrade}</div>
+                            <div className="info-label">u toku studija</div>
+                        </div>
+                        <div className="info-card">
+                            <h3>Ukupno ispitnih prijava</h3>
+                            <div className="info-value" style={{color: 'var(--warning)'}}>{studentData.totalExams}</div>
+                            <div className="info-label">u toku studija</div>
+                        </div>
+                    </div>
+
+                    <div className="section-header">Ostvareni uspeh</div>
+
+                    {/* ESPB Grid */}
+                    <div className="espb-grid">
+                        <div className="stat-card">
+                            <h3>Ostvareni ESPB</h3>
+                            <div className="stat-value primary">{studentData.espbEarned}</div>
+                            <div className="stat-label">u tekućoj školskoj godini</div>
+                        </div>
+                        <div className="stat-card">
+                            <h3>Ukupno ESPB</h3>
+                            <div className="stat-value primary">{studentData.espbTotal}</div>
+                            <div className="stat-label">u toku studija</div>
+                        </div>
+                        <div className="stat-card">
+                            <h3>Broj položenih predmeta</h3>
+                            <div className="stat-value success">{studentData.passedSubjects}</div>
+                            <div className="stat-label">u toku studija</div>
+                        </div>
+                        <div className="stat-card">
+                            <h3>Broj nepoloženih predmeta</h3>
+                            <div className="stat-value danger">{studentData.failedSubjects}</div>
+                            <div className="stat-label">u toku studija</div>
+                        </div>
+                    </div>
+
+                    {/* Study Flow */}
+                    <div className="study-flow">
+                        
+                    </div>
+
+                    {/* Bottom Navigation */}
+                    <div className="bottom-nav">
+                        <div 
+                            className={`nav-item ${activeTab === 'home' ? 'active' : ''}`}
+                            onClick={() => {
+                                setActiveTab('home');
+                                setSettingsOpen(false);
+                                setUpcomingDaysOpen(false);
+                                setStudentInfoOpen(false);
+                                setPassedSubjectsOpen(false);
+                                setExamScheduleOpen(false);
+                                setExamPeriodsOpen(false);
+                                setExamResultsOpen(false);
+                            }}
+                        >
+                            <svg className="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                            </svg>
+                            <div className="nav-label">Početna</div>
+                        </div>
+                        <div 
+                            className={`nav-item ${activeTab === 'courses' ? 'active' : ''}`}
+                            onClick={() => {
+                                setActiveTab('courses');
+                                setExamPeriodsOpen(true);
+                            }}
+                        >
+                            <svg className="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
+                            </svg>
+                            <div className="nav-label">Prijava ispita</div>
+                        </div>
+                        <div 
+                            className={`nav-item ${activeTab === 'calendar' ? 'active' : ''}`}
+                            onClick={() => {
+                                setActiveTab('calendar');
+                                setExamScheduleOpen(true);
+                            }}
+                        >
+                            <svg className="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z"/>
+                            </svg>
+                            <div className="nav-label">Raspored polaganja</div>
+                        </div>
+                        <div 
+                            className={`nav-item ${activeTab === 'info' ? 'active' : ''}`}
+                            onClick={() => {
+                                    setActiveTab('info');
+                                    setExamResultsOpen(true);
+                                    setExamPeriodsOpen(false);
+                                }}
+                        >
+                            <svg className="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                            </svg>
+                            <div className="nav-label">Info</div>
+                        </div>
+                    </div>
+
+                    {/* Settings Screen */}
+                    <div className={`settings-screen ${settingsOpen ? 'open' : ''}`}>
+                        <div className="settings-header">
+                            <div className="back-btn" onClick={() => setSettingsOpen(false)}>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" style={{width: '24px', height: '24px'}}>
+                                    <path d="M15 18l-6-6 6-6"/>
+                                </svg>
+                            </div>
+                            <div className="settings-title">Podešavanja</div>
+                        </div>
+
+                        <div className="settings-content">
+                            {/* Profile Image */}
+                            <div className="profile-image-section">
+                                <div className="profile-photo-wrapper">
+                                    <div className="profile-photo">
+                                        <svg className="photo-icon" viewBox="0 0 24 24" fill="none">
+                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" fill="#E0E0E0"/>
+                                            <path d="M12 6c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm0 15c-2.03 0-4.43-.82-6.14-2.88C7.55 15.8 9.68 15 12 15s4.45.8 6.14 3.12C16.43 20.18 14.03 21 12 21z" fill="#BDBDBD"/>
+                                        </svg>
+                                    </div>
+                                    <div className="camera-btn">
+                                        <svg className="camera-icon" viewBox="0 0 24 24" fill="white">
+                                            <path d="M12 15.2c1.77 0 3.2-1.43 3.2-3.2s-1.43-3.2-3.2-3.2-3.2 1.43-3.2 3.2 1.43 3.2 3.2 3.2zm0-5.5c1.27 0 2.3 1.03 2.3 2.3s-1.03 2.3-2.3 2.3-2.3-1.03-2.3-2.3 1.03-2.3 2.3-2.3z"/>
+                                            <path d="M20 4h-3.17L15 2H9L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h3.83l1.83-2h4.68l1.83 2H20v12z"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div className="student-id-name">
+                                    {studentData.id} {studentData.name}
+                                </div>
+                            </div>
+
+                            {/* Settings List */}
+                            <div className="settings-list">
+                                {/* Email */}
+                                <div className="settings-item">
+                                    <svg className="settings-icon" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                                    </svg>
+                                    <div className="settings-item-content">
+                                        <div className="settings-item-label">Imejl:</div>
+                                        <div className="settings-item-value">kristian.kandic@gmail.com</div>
+                                    </div>
+                                </div>
+
+                                {/* Language */}
+                                <div className="settings-item">
+                                    <svg className="settings-icon" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95c-.32-1.25-.78-2.45-1.38-3.56 1.84.63 3.37 1.91 4.33 3.56zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2 0 .68.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56-1.84-.63-3.37-1.9-4.33-3.56zm2.95-8H5.08c.96-1.66 2.49-2.93 4.33-3.56C8.81 5.55 8.35 6.75 8.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2 0-.68.07-1.35.16-2h4.68c.09.65.16 1.32.16 2 0 .68-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95c-.96 1.65-2.49 2.93-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2 0-.68-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z"/>
+                                    </svg>
+                                    <div className="settings-item-content">
+                                        <div className="settings-item-label">Jezik:</div>
+                                    </div>
+                                    <div className="settings-dropdown">
+                                        <span style={{fontSize: '16px', color: 'var(--text-dark)'}}>srpski</span>
+                                        <svg className="dropdown-icon" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M7 10l5 5 5-5z"/>
+                                        </svg>
+                                    </div>
+                                </div>
+
+                                {/* Dark Mode Toggle */}
+                                <div className="settings-item">
+                                    <svg className="settings-icon" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/>
+                                    </svg>
+                                    <div className="settings-item-content">
+                                        <div className="settings-item-label">Tamni prikaz:</div>
+                                    </div>
+                                    <div 
+                                        className={`toggle-switch ${darkMode ? 'active' : ''}`}
+                                        onClick={() => setDarkMode(!darkMode)}
+                                    >
+                                        <div className="toggle-knob"></div>
+                                    </div>
+                                </div>
+
+                                {/* Version */}
+                                <div className="settings-item">
+                                    <svg className="settings-icon" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                                    </svg>
+                                    <div className="settings-item-content">
+                                        <div className="settings-item-label">Verzija:</div>
+                                        <div className="settings-item-value">v1.0.90</div>
+                                    </div>
+                                </div>
+
+                                {/* Logout */}
+                                <div className="logout-btn">
+                                    <svg className="logout-icon" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+                                    </svg>
+                                    <div className="logout-text">Odjava</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Upcoming Days Screen */}
+                    <div className={`upcoming-days-screen ${upcomingDaysOpen ? 'open' : ''}`}>
+                        <div className="upcoming-header">
+                            <div className="upcoming-header-left">
+                                <div className="back-btn" onClick={() => setUpcomingDaysOpen(false)}>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" style={{width: '24px', height: '24px'}}>
+                                        <path d="M15 18l-6-6 6-6"/>
+                                    </svg>
+                                </div>
+                                <div className="upcoming-title">Neradni dani</div>
+                            </div>
+                            
+                        </div>
+                        <div className="school-year-label">
+                            Školska godina: 2025/2026
+                        </div>
+                        <div className="upcoming-content">
+                            {Object.entries(upcomingDays).map(([month, holidays]) => (
+                                <div key={month} className="month-section">
+                                    <div className="month-header">{month}</div>
+                                    <div className="holiday-list">
+                                        {holidays.map((holiday, idx) => (
+                                            <div key={idx} className="holiday-item">
+                                                <div className="holiday-icon">
+                                                    <svg className="calendar-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                        <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10z"/>
+                                                    </svg>
+                                                </div>
+                                                <div className="holiday-info">
+                                                    <div className="holiday-date">{holiday.date}</div>
+                                                    <div className="holiday-name">{holiday.name}</div>
+                                                </div>
+                                                <div className="holiday-day">{holiday.day}</div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Student Info Screen */}
+                    <div className={`student-info-screen ${studentInfoOpen ? 'open' : ''}`}>
+                        <div className="info-screen-header">
+                            <div className="back-btn" onClick={() => setStudentInfoOpen(false)}>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" style={{width: '24px', height: '24px'}}>
+                                    <path d="M15 18l-6-6 6-6"/>
+                                </svg>
+                            </div>
+                            <div className="info-screen-title">Podaci o studentu</div>
+                        </div>
+
+                        {/* Profile Section */}
+                        <div className="info-profile-section">
+                            <div className="profile-avatar">
+                                <svg className="avatar-icon" viewBox="0 0 24 24" fill="#2196F3">
+                                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                </svg>
+                            </div>
+                            <div className="profile-info">
+                                <h2>{studentData.id}</h2>
+                                <h1>{studentData.name}</h1>
+                            </div>
+                        </div>
+
+                        {/* Notice */}
+                        <div className="info-notice">
+                            <svg className="shield-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+                            </svg>
+                            <div className="notice-text">
+                                Osnovni podaci studenta verifikovani su od strane referenta studentske službe. Za eventualne promene osnovnih podataka potrebno je da se obratite Vašem referentu
+                            </div>
+                        </div>
+
+                        {/* Personal Info Form */}
+                        <div className="form-section">
+                            <div className="section-title">
+                                Podaci o studentu
+                                
+                            </div>
+
+                            <div className="form-group">
+                                <label className="form-label">Ime:</label>
+                                <input type="text" className="form-input" value="Kristian" disabled />
+                            </div>
+
+                            <div className="form-group">
+                                <label className="form-label">Prezime:</label>
+                                <input type="text" className="form-input" value="Kandić" disabled />
+                            </div>
+
+                            <div className="form-group">
+                                <label className="form-label">Pol:</label>
+                                <input type="text" className="form-input" value="Muško" disabled />
+                            </div>
+
+                            <div className="form-group">
+                                <label className="form-label">Ime roditelja:</label>
+                                <input type="text" className="form-input" value="Miodrag" disabled />
+                            </div>
+
+                            <div className="form-group">
+                                <label className="form-label">Datum rođenja:</label>
+                                <input type="text" className="form-input" value="13.02.2004." disabled />
+                            </div>
+
+                            <div className="form-group">
+                                <label className="form-label">Država rođenja:</label>
+                                <input type="text" className="form-input" value="Kraljevina Danska" disabled />
+                            </div>
+
+                            <div className="form-group">
+                                <label className="form-label">Opština rođenja:</label>
+                                <input type="text" className="form-input" value="" disabled />
+                            </div>
+
+                            <div className="form-group">
+                                <label className="form-label">Mesto rođenja:</label>
+                                <input type="text" className="form-input" value="Svenborg" disabled />
+                            </div>
+
+                            <div className="form-group">
+                                <label className="form-label">Državljanstvo:</label>
+                                <input type="text" className="form-input" value="Bosna i Hercegovina" disabled />
+                            </div>
+
+                            <div className="form-group">
+                                <label className="form-label">Jedinstveni obrazovni broj studenta (JOB):</label>
+                                <input type="text" className="form-input" value="5MTLSIOLK9CAELD4" disabled />
+                            </div>
+                        </div>
+
+                        {/* Address Info Form */}
+                        <div className="form-section">
+                            <div className="section-title">
+                                Adresni podaci
+                                
+                            </div>
+
+                            
+
+                            <div className="form-group">
+                                <label className="form-label">Mesto stanovanja:</label>
+                                <input type="text" className="form-input" value="Milići" />
+                            </div>
+
+                            <div className="form-group">
+                                <label className="form-label">Opština stanovanja:</label>
+                                <input type="text" className="form-input" value="" />
+                            </div>
+
+                            <div className="form-group">
+                                <label className="form-label">Adresa stanovanja:</label>
+                                <input type="text" className="form-input" value="Solunskih junaka 35, Milići" />
+                            </div>
+
+                        </div>
+                    </div>
+
+                    {/* Passed Subjects Screen */}
+                    <div className={`passed-subjects-screen ${passedSubjectsOpen ? 'open' : ''}`}>
+                        <div className="subjects-header">
+                            <div className="back-btn" onClick={() => setPassedSubjectsOpen(false)}>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" style={{width: '24px', height: '24px'}}>
+                                    <path d="M15 18l-6-6 6-6"/>
+                                </svg>
+                            </div>
+                            <div className="subjects-header-content">
+                                <div className="subjects-title">Položeni predmeti</div>
+                                
+                            </div>
+                        </div>
+
+                        <div className="subjects-summary">
+                            <div className="summary-line">Prosečna ocena: 9,00</div>
+                            <div className="summary-line">Ukupan broj ESPB bodova: 54</div>
+                        </div>
+
+                        <div className="subjects-content">
+                            {/* Year 2 */}
+                            <div className="year-section">
+                                <div className="year-header">2. Godina (2)</div>
+                                <div className="subjects-list">
+                                    {passedSubjects.year2.map((subject, idx) => (
+                                        <div key={idx} className="subject-item">
+                                            <div className="grade-badge">{subject.grade}</div>
+                                            <div className="subject-details">
+                                                <div className="subject-code-name">
+                                                    {subject.code} {subject.name}
+                                                </div>
+                                                <div className="subject-professor">{subject.professor}</div>
+                                            </div>
+                                            <div className="subject-espb">{subject.espb} ESPB</div>
+                                            
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Year 1 */}
+                            <div className="year-section">
+                                <div className="year-header">1. Godina (9)</div>
+                                <div className="subjects-list">
+                                    {passedSubjects.year1.map((subject, idx) => (
+                                        <div key={idx} className="subject-item">
+                                            <div className="grade-badge">{subject.grade}</div>
+                                            <div className="subject-details">
+                                                <div className="subject-code-name">
+                                                    {subject.code} {subject.name}
+                                                </div>
+                                                <div className="subject-professor">{subject.professor}</div>
+                                            </div>
+                                            <div className="subject-espb">{subject.espb} ESPB</div>
+                                            
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </>
+                    )}
+
+                    {/* Failed Subjects Screen */}
+                    <div className={`failed-subjects-screen ${failedSubjectsOpen ? 'open' : ''}`}>
+                        <div className="subjects-header">
+                            <div className="back-btn" onClick={() => setFailedSubjectsOpen(false)}>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" style={{width: '24px', height: '24px'}}>
+                                    <path d="M15 18l-6-6 6-6"/>
+                                </svg>
+                            </div>
+                            <div className="subjects-header-content">
+                                <div className="subjects-title">Nepoloženi predmeti</div>
+                               
+                            </div>
+                        </div>
+
+                        <div className="failed-summary">
+                            Ukupan broj ESPB bodova: 36
+                        </div>
+
+                        <div className="subjects-content">
+                            {/* Year 2 */}
+                            <div className="year-section">
+                                <div className="year-header">2. Godina (4)</div>
+                                <div className="subjects-list">
+                                    {failedSubjects.year2.map((subject, idx) => (
+                                        <div key={idx} className="subject-item">
+                                            <div className={`failed-grade-badge grade-${subject.grade}`}>{subject.grade}</div>
+                                            <div className="subject-details">
+                                                <div className="subject-code-name">
+                                                    {subject.code} {subject.name}
+                                                </div>
+                                                <div className="subject-status">{subject.status}</div>
+                                            </div>
+                                            <div className="subject-semester">{subject.semester}</div>
+                                            
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Year 1 */}
+                            <div className="year-section">
+                                <div className="year-header">1. Godina (2)</div>
+                                <div className="subjects-list">
+                                    {failedSubjects.year1.map((subject, idx) => (
+                                        <div key={idx} className="subject-item">
+                                            <div className={`failed-grade-badge grade-${subject.grade}`}>{subject.grade}</div>
+                                            <div className="subject-details">
+                                                <div className="subject-code-name">
+                                                    {subject.code} {subject.name}
+                                                </div>
+                                                <div className="subject-status">{subject.status}</div>
+                                            </div>
+                                            <div className="subject-semester">{subject.semester}</div>
+                                            
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Exam Schedule Screen */}
+                    <div className={`exam-schedule-screen ${examScheduleOpen ? 'open' : ''}`}>
+                        <div className="exam-schedule-header">
+                            <div className="back-btn" onClick={() => {
+                                setExamScheduleOpen(false);
+                                setActiveTab('home');
+                            }}>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" style={{width: '24px', height: '24px'}}>
+                                    <path d="M15 18l-6-6 6-6"/>
+                                </svg>
+                            </div>
+                            <div className="exam-schedule-header-content">
+                                <div className="exam-schedule-title">Raspored polaganja</div>
+                                
+                            </div>
+                        </div>
+                        <div className="exam-schedule-subheader">
+                            <span>Školska godina: 2025/2026</span>
+                            <span>Aktivni rokovi</span>
+                        </div>
+                        <div className="exam-schedule-content">
+                            {Object.entries(examSchedule).map(([period, exams]) => (
+                                <div key={period} className="schedule-period-section">
+                                    <div className="schedule-period-header">{period}</div>
+                                    {exams.map((exam, idx) => (
+                                        <div key={idx} className="schedule-exam">
+                                            <div className="question-badge">?</div>
+                                            <div className="program-details" style={{flex: 1}}>
+                                                <div className="program-name">{exam.code} {exam.name}</div>
+                                            </div>
+                                            <div className="exam-date">{exam.date}</div>
+                                            
+                                        </div>
+                                    ))}
+                                </div>
+                            ))}
+                        </div>
+                        <div className="bottom-nav">
+                            <div 
+                                className={`nav-item ${activeTab === 'home' ? 'active' : ''}`}
+                                onClick={() => {
+                                    setActiveTab('home');
+                                    setExamScheduleOpen(false);
+                                    setExamPeriodsOpen(false);
+                                    setExamResultsOpen(false);
+
+                                }}
+                            >
+                                <svg className="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                                </svg>
+                                <div className="nav-label">Početna</div>
+                            </div>
+                            <div 
+                                className={`nav-item ${activeTab === 'courses' ? 'active' : ''}`}
+                                onClick={() => {
+                                    setActiveTab('courses');
+                                    setExamPeriodsOpen(true);
+                                }}
+                            >
+                                <svg className="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
+                                </svg>
+                                <div className="nav-label">Prijava ispita</div>
+                            </div>
+                            <div className={`nav-item active`}>
+                                <svg className="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z"/>
+                                </svg>
+                                <div className="nav-label">Raspored polaganja</div>
+                            </div>
+                            <div 
+                                className={`nav-item ${activeTab === 'info' ? 'active' : ''}`}
+                                onClick={() => {
+                                    setActiveTab('info');
+                                    setExamScheduleOpen(false);
+                                    setExamPeriodsOpen(false);
+                                    setExamResultsOpen(true);
+                                    
+
+                                }}
+                            >
+                                <svg className="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                                </svg>
+                                <div className="nav-label">Info</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Annual Schedule Screen */}
+                    <div className={`annual-schedule-screen ${annualScheduleOpen ? 'open' : ''}`}>
+                        <div className="study-flow-header">
+                            <div className="back-btn" onClick={() => setAnnualScheduleOpen(false)}>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" style={{width: '24px', height: '24px'}}>
+                                    <path d="M15 18l-6-6 6-6"/>
+                                </svg>
+                            </div>
+                            <div className="study-flow-header-content">
+                                <div className="study-flow-title">Godišnji raspored ispita</div>
+                                
+                            </div>
+                        </div>
+
+                        <div className="attendance-subheader" style={{justifyContent: 'flex-start'}}>
+                            Školska godina: 2025/2026
+                        </div>
+
+                        <div className="study-flow-content" style={{paddingBottom: '20px'}}>
+                            {annualSchedulePeriods.map((period, periodIdx) => (
+                                <div key={periodIdx}>
+                                    <div className="schedule-period-header">{period.name}</div>
+                                    {period.exams.map((exam, examIdx) => (
+                                        <div key={examIdx} className="schedule-exam-item">
+                                            <div className={`schedule-badge ${period.badge === 'VR' ? 'vr' : 'rr'}`}>
+                                                {period.badge || 'RR'}
+                                            </div>
+                                            <div className="program-details" style={{flex: 1}}>
+                                                <div className="program-name">{exam.name}</div>
+                                                <div className="program-type">{exam.professor}</div>
+                                            </div>
+                                            <div className="exam-date">{exam.date}</div>
+                                            
+                                        </div>
+                                    ))}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Exam Periods Screen */}
+                    <div className={`exam-periods-screen ${examPeriodsOpen ? 'open' : ''}`}>
+                        <div className="exam-periods-header">
+                            <div className="back-btn" onClick={() => {
+                                setExamPeriodsOpen(false);
+                                setActiveTab('home');
+                            }}>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" style={{width: '24px', height: '24px'}}>
+                                    <path d="M15 18l-6-6 6-6"/>
+                                </svg>
+                            </div>
+                            <div className="exam-periods-title">Prijava/Odjava ispita</div>
+                        </div>
+                        <div className="exam-periods-content">
+                            <div className="exam-periods-instruction">
+                                Izaberite ispitni rok za prijavu/odjavu ispita
+                            </div>
+                            {examPeriods.map((period) => (
+                                <div 
+                                    key={period.id} 
+                                    className="exam-period-card"
+                                    onClick={() => {
+                                        setSelectedExamPeriod(period);
+                                        setExamPeriodDetailsOpen(true);
+                                    }}
+                                >
+                                    <div className="info-icon-circle">
+                                        <svg className="info-icon" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                                        </svg>
+                                    </div>
+                                    <div className="exam-period-info">
+                                        <div className="exam-period-name">{period.name}</div>
+                                        <div className="exam-period-description">{period.info}</div>
+                                    </div>
+                                    <svg className="subject-arrow" viewBox="0 0 24 24" fill="currentColor" style={{flexShrink: 0}}>
+                                        <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+                                    </svg>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="bottom-nav">
+                            <div 
+                                className={`nav-item ${activeTab === 'home' ? 'active' : ''}`}
+                                onClick={() => {
+                                    setActiveTab('home');
+                                    setExamPeriodsOpen(false);
+                                    setExamScheduleOpen(false);
+                                    setExamResultsOpen(false);
+
+                                }}
+                            >
+                                <svg className="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                                </svg>
+                                <div className="nav-label">Početna</div>
+                            </div>
+                            <div className={`nav-item active`}>
+                                <svg className="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
+                                </svg>
+                                <div className="nav-label">Prijava ispita</div>
+                            </div>
+                           <div 
+                            className={`nav-item ${activeTab === 'calendar' ? 'active' : ''}`}
+                            onClick={() => {
+                                setActiveTab('calendar');
+                                setExamPeriodsOpen(false);
+                                setExamScheduleOpen(true);
+
+                            }}
+                        >
+                            <svg className="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z"/>
+                            </svg>
+                            <div className="nav-label">Raspored polaganja</div>
+                        </div>
+                            <div 
+                                className={`nav-item ${activeTab === 'info' ? 'active' : ''}`}
+                                onClick={() => {
+                                    setActiveTab('info');
+                                    setExamScheduleOpen(false);
+                                    setExamPeriodsOpen(false);
+                                    setExamResultsOpen(true);
+
+                                }}
+                            >
+                                <svg className="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                                </svg>
+                                <div className="nav-label">Info</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Exam Period Details Screen */}
+                    {selectedExamPeriod && (
+                        <div className={`exam-details-screen ${examPeriodDetailsOpen ? 'open' : ''}`}>
+                            <div className="exam-details-header">
+                                <div className="back-btn" onClick={() => setExamPeriodDetailsOpen(false)}>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" style={{width: '24px', height: '24px'}}>
+                                        <path d="M15 18l-6-6 6-6"/>
+                                    </svg>
+                                </div>
+                                <div className="exam-details-title">{selectedExamPeriod.name.replace(' I 2025/2026', ' I')}</div>
+                                <svg className="header-icon-btn" viewBox="0 0 24 24" fill="white">
+                                    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                                </svg>
+                            </div>
+                            <div className="exam-summary">
+                                <div className="summary-row">
+                                    <span className="summary-label">Stanje na vašem računu:</span>
+                                    <span className="summary-value">{balance.toLocaleString('sr-RS', {minimumFractionDigits: 2, maximumFractionDigits: 2})} RSD</span>
+                                </div>
+                                <div className="summary-row">
+                                    <span className="summary-label">Ispita za prijavu:</span>
+                                    <span className="summary-value">{summary.toRegister}<span style={{marginLeft: '40px'}}>{summary.totalCost.toLocaleString('sr-RS', {minimumFractionDigits: 2, maximumFractionDigits: 2})} RSD</span></span>
+                                </div>
+                                <div className="summary-row">
+                                    <span className="summary-label">Ispita za odjavu:</span>
+                                    <span className="summary-value">{summary.toWithdraw}<span style={{marginLeft: '40px'}}>0,00 RSD</span></span>
+                                </div>
+                                <div className="summary-row">
+                                    <span className="summary-label">Stanje nakon prijave/odjave:</span>
+                                    <span className="summary-value">{finalBalance.toLocaleString('sr-RS', {minimumFractionDigits: 2, maximumFractionDigits: 2})} RSD</span>
+                                </div>
+                            </div>
+                            <div className="exam-list">
+                                {selectedExamPeriod.exams.map((exam, idx) => (
+                                    <div key={idx} className="exam-item">
+                                        <div 
+                                            className={`exam-toggle ${registeredExams[exam.code] ? 'active' : ''}`}
+                                            onClick={() => toggleExamRegistration(exam.code)}
+                                        >
+                                            <div className="exam-toggle-knob"></div>
+                                        </div>
+                                        <div className="exam-info">
+                                            <div className="exam-code-name">{exam.code} {exam.name}</div>
+                                            <div className="exam-professor">{exam.professor}</div>
+                                            <div className="exam-deadline">{exam.deadline}</div>
+                                        </div>
+                                        <div className="exam-meta">
+                                            <div className="exam-date">{exam.date}</div>
+                                            <div className="exam-price">{exam.price}</div>
+                                        </div>
+                                       
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="register-button" onClick={saveExamRegistration}>
+                                Prijava/Odjava ispita
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Study Flow Screen */}
+                    <div className={`study-flow-screen ${studyFlowOpen ? 'open' : ''}`}>
+                        <div className="study-flow-header">
+                            <div className="back-btn" onClick={() => setStudyFlowOpen(false)}>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" style={{width: '24px', height: '24px'}}>
+                                    <path d="M15 18l-6-6 6-6"/>
+                                </svg>
+                            </div>
+                            <div className="study-flow-header-content">
+                                <div className="study-flow-title">Tok studija</div>
+                                
+                            </div>
+                        </div>
+
+                        <div className="study-flow-content">
+                            {studyFlowPrograms.map((program, idx) => (
+                                <div key={idx}>
+                                    <div className="year-divider">{program.year}</div>
+                                    <div className="program-item">
+                                        <div className={`program-year-badge ${program.yearNum === 'II' ? 'red' : program.type === 'Budžet' ? 'green' : 'red'}`}>
+                                            {program.yearNum}
+                                        </div>
+                                        <div className="program-details">
+                                            <div className="program-name">{program.program}</div>
+                                            <div className="program-type">{program.type}</div>
+                                        </div>
+                                       
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* News Screen */}
+                    <div className={`news-screen ${newsOpen ? 'open' : ''}`}>
+                        <div className="news-header">
+                            <div className="back-btn" onClick={() => setNewsOpen(false)}>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" style={{width: '24px', height: '24px'}}>
+                                    <path d="M15 18l-6-6 6-6"/>
+                                </svg>
+                            </div>
+                            <div className="news-header-content">
+                                <div className="news-title">Vesti</div>
+                                <div className="header-icons">
+                                    
+                                </div>
+                            </div>
+                        </div>
+
+                        
+
+                        <div className="empty-state">
+                            <div className="empty-title">Nema podataka</div>
+                            <div className="database-icon-wrapper">
+                                <svg className="database-icon" viewBox="0 0 200 200">
+                                    <ellipse className="database-stack" cx="100" cy="40" rx="80" ry="20"/>
+                                    <rect className="database-stack" x="20" y="40" width="160" height="40"/>
+                                    <ellipse className="database-stack" cx="100" cy="80" rx="80" ry="20"/>
+                                    <rect className="database-stack" x="20" y="80" width="160" height="40"/>
+                                    <ellipse className="database-stack" cx="100" cy="120" rx="80" ry="20"/>
+                                    <rect className="database-stack" x="20" y="120" width="160" height="40"/>
+                                    <ellipse className="database-stack" cx="100" cy="160" rx="80" ry="20"/>
+                                </svg>  
+                                <svg className="warning-triangle" viewBox="0 0 24 24" style={{position: 'absolute', bottom: '225px'}}>
+                                    <path fill="#FF9999" d="M1 21h22L12 2 1 21z"/>
+                                    <path fill="white" d="M13 18h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Attendance Statistics Screen */}
+                    <div className={`attendance-screen ${attendanceOpen ? 'open' : ''}`}>
+                        <div className="attendance-header">
+                            <div className="back-btn" onClick={() => setAttendanceOpen(false)}>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" style={{width: '24px', height: '24px'}}>
+                                    <path d="M15 18l-6-6 6-6"/>
+                                </svg>
+                            </div>
+                            <div className="attendance-header-content">
+                                <div className="attendance-title">Statistika prisustva</div>
+                                <div className="header-icons">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div className="attendance-subheader">
+                            <span>Školska godina: 2025/2026</span>
+                            <span>Zimski semestar</span>
+                        </div>
+                        <div className="empty-state">
+                            <div className="empty-title">Nema podataka</div>
+                            <div className="database-icon-wrapper">
+                                <svg className="database-icon" viewBox="0 0 200 200">
+                                    <ellipse className="database-stack" cx="100" cy="40" rx="80" ry="20"/>
+                                    <rect className="database-stack" x="20" y="40" width="160" height="40"/>
+                                    <ellipse className="database-stack" cx="100" cy="80" rx="80" ry="20"/>
+                                    <rect className="database-stack" x="20" y="80" width="160" height="40"/>
+                                    <ellipse className="database-stack" cx="100" cy="120" rx="80" ry="20"/>
+                                    <rect className="database-stack" x="20" y="120" width="160" height="40"/>
+                                    <ellipse className="database-stack" cx="100" cy="160" rx="80" ry="20"/>
+                                </svg>
+                                <svg className="warning-triangle" viewBox="0 0 24 24" style={{position: 'absolute', bottom: '200px'}}>
+                                    <path fill="#FF9999" d="M1 21h22L12 2 1 21z"/>
+                                    <path fill="white" d="M13 18h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Exam Results Screen */}
+                    <div className={`exam-results-screen ${examResultsOpen ? 'open' : ''}`}>
+                        <div className="results-header">
+                            <div className="back-btn" onClick={() => {
+                                setExamResultsOpen(false);
+                                setActiveTab('home');
+                            }}>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" style={{width: '24px', height: '24px'}}>
+                                    <path d="M15 18l-6-6 6-6"/>
+                                </svg>
+                            </div>
+                            <div className="results-header-content">
+                                <div className="results-title">Rezultati ispita</div>
+                                <div className="header-icons">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div className="results-subheader">
+                            <span>Školska godina: 2025/2026</span>
+                            <span>Aktivni rokovi</span>
+                        </div>
+                        <div className="empty-state">
+                            <div className="empty-title">Nema podataka</div>
+                            <div className="database-icon-wrapper">
+                                <svg className="database-icon" viewBox="0 0 200 200">
+                                    <ellipse className="database-stack" cx="100" cy="40" rx="80" ry="20"/>
+                                    <rect className="database-stack" x="20" y="40" width="160" height="40"/>
+                                    <ellipse className="database-stack" cx="100" cy="80" rx="80" ry="20"/>
+                                    <rect className="database-stack" x="20" y="80" width="160" height="40"/>
+                                    <ellipse className="database-stack" cx="100" cy="120" rx="80" ry="20"/>
+                                    <rect className="database-stack" x="20" y="120" width="160" height="40"/>
+                                    <ellipse className="database-stack" cx="100" cy="160" rx="80" ry="20"/>
+                                </svg>
+                                <svg className="warning-triangle" viewBox="0 0 24 24" style={{position: 'absolute', bottom: '235px'}}>
+                                    <path fill="#FF9999" d="M1 21h22L12 2 1 21z"/>
+                                    <path fill="white" d="M13 18h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div className="bottom-nav">
+                            <div 
+                                className={`nav-item ${activeTab === 'home' ? 'active' : ''}`}
+                                onClick={() => {
+                                    setActiveTab('home');
+                                    setExamPeriodsOpen(false);
+                                    setExamScheduleOpen(false);
+                                    setExamResultsOpen(false);
+
+                                }}
+                            >
+                                <svg className="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                                </svg>
+                                <div className="nav-label">Početna</div>
+                            </div>
+                            <div 
+                                className={`nav-item ${activeTab === 'courses' ? 'active' : ''}`}
+                                onClick={() => {
+                                    setActiveTab('courses');
+                                    setExamPeriodsOpen(true);
+                                    setExamScheduleOpen(false);
+                                }}
+                            >
+                                <svg className="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
+                                </svg>
+                                <div className="nav-label">Prijava ispita</div>
+                            </div>
+                            <div 
+                            className={`nav-item ${activeTab === 'calendar' ? 'active' : ''}`}
+                            onClick={() => {
+                                setActiveTab('calendar');
+                                setExamPeriodsOpen(false);
+                                setExamScheduleOpen(true);
+
+                            }}
+                        >
+                            <svg className="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z"/>
+                            </svg>
+                            <div className="nav-label">Raspored polaganja</div>
+                            </div>
+                            <div className={`nav-item active`}>
+                                <svg className="nav-icon" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                                </svg>
+                                <div className="nav-label">Info</div>
+                            </div>
+                        </div>
+                    </div>
+                        
+                    )
+
+                    {/* Error Message */}
+                    <div className={`error-message ${showError ? 'show' : ''}`}>
+                        <div className="error-title">Greška</div>
+                        <div className="error-text">Morate biti povezani na FTN mrežu</div>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.render(<App />, document.getElementById('root'));
+
+        // Register service worker for PWA support
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then(registration => console.log('ServiceWorker registered'))
+                    .catch(err => console.log('ServiceWorker registration failed'));
+            });
+        }
+    </script>
+</body>
+</html>
